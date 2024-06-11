@@ -1,12 +1,14 @@
 import api from "../config/axios";
 
 
-// === GET routes === //
+// === POST routes === //
 
-export const getTest = async () => {
+export const checkoutItems = async (products: Product[]) => {
   try {
     const auth = { withCredentials: true };
-    const res = await api.get('/api/alerts', auth);
+    const payload = { products };
+    const res = await api.post('/api/stripe/create-checkout-session', payload, auth);
+    location.replace(res.data.url);
     return res.data;
   } catch (err) {
     console.log(err);

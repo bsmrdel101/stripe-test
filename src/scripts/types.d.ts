@@ -3,9 +3,7 @@ interface InputHTML extends React.HTMLProps<HTMLInputElement> {}
 interface TableHTML extends React.HTMLProps<HTMLTableElement> {}
 interface SelectHTML extends React.HTMLProps<HTMLSelectElement> {}
 
-
-type User = {
-  id: number
-  username: string
-  password: string
+type Product = {
+  price: string
+  quantity: number
 };
