@@ -1,5 +1,5 @@
 import express from "express";
-import alertsRouter from "../controllers/alerts.controller.js";
+import stripeRouter from "../controllers/stripe.controller.js";
 
 /**
  * 
@@ -7,7 +7,7 @@ import alertsRouter from "../controllers/alerts.controller.js";
  */
 export function attachRoutes(app) {
   const router = express.Router();
-  router.use("/alerts", alertsRouter);
+  router.use("/stripe", stripeRouter);
 
   app.use("/api", router);
 

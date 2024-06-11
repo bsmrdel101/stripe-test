@@ -7,7 +7,7 @@ import cors from 'cors';
  */
 export function configureServer(app) {
   app.use(cors({
-    origin: ['http://localhost:3001'],
+    origin: ['http://localhost:3001','http://localhost:8001', 'https://checkout.stripe.com'],
     credentials: true
   }));
   attachRoutes(app);
