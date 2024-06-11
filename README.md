@@ -1,6 +1,4 @@
-# NextJS Template
-
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/fSlgVZ?referralCode=2dmFBO)
+# Stripe Test
 
 ## Getting Started
 
