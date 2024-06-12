@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "docker:setup": "rm -rf ./.postgres-data && docker-compose up",
-    "test": "mocha --recursive src/__test__/**/*.test.js"
+    "test": "mocha --recursive src/__test__/**/*.test.js",
+    "stripe:listen": "stripe listen --forward-to localhost:8001/api/stripe/webhook"
   },
   "keywords": [],
   "author": "",

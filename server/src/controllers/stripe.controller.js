@@ -13,7 +13,7 @@ router.use(express.json());
  * @base_path /api/stripe
 */
 
-router.post('/create-checkout-session', async (req, res) => {
+router.post('/checkout', async (req, res) => {
   const { products } = req.body;
   try {
     const session = await stripe.checkout.sessions.create({
@@ -31,25 +31,25 @@ router.post('/create-checkout-session', async (req, res) => {
 
 router.post('/webhook', express.json({type: 'application/json'}), async (req, res) => {
   const event = req.body;
-  console.log('YAY!!!:', event.type);
-
   switch (event.type) {
     case 'payment_intent.succeeded':
-      const paymentIntent = event.data.object;
-      const sessionWithLineItems = paymentIntent.expand = ['line_items'];
-      // const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
-      //   event.data.object.id,
-      //   {
-      //     expand: ['line_items'],
-      //   }
-      // );
-      const lineItems = sessionWithLineItems.line_items;
-      fulfillOrder(lineItems);
+      console.log('YAY!!!:', event.type);
+      console.log(event.data.object.id);
+      const sessionId = event.data.object.id;
+      stripe.checkout.sessions.retrieve(
+        sessionId,
+        { expand: ['line_items'] }
+      ).then(function(session) {
+        console.log('ITEMS: ', session.line_items);
+        fulfillOrder(session.line_items.data);
+      }).catch(function(error) {
+        console.log(error);
+      });
       break;
     default:
-      console.log(`Unhandled event type ${event.type}`);
+      break;
   }
-  response.status(200).end();
+  res.status(200).end();
 });
 
 const fulfillOrder = async (lineItems) => {
