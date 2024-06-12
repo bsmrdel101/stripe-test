@@ -23,33 +23,21 @@ router.post('/checkout', async (req, res) => {
       success_url: `${DOMAIN}/`,
       cancel_url: `${DOMAIN}/`,
     });
+
+    router.post('/webhook', (req, res) => {
+      const event = req.body;
+      if (event.type === 'payment_intent.succeeded') {
+        fulfillOrder(event.data.object.line_items);
+      } else {
+        res.status(500);
+      }
+      res.status(200).end();
+    });
+
     res.json({ url: session.url });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
-
-router.post('/webhook', express.json({type: 'application/json'}), async (req, res) => {
-  const event = req.body;
-  switch (event.type) {
-    case 'payment_intent.succeeded':
-      console.log('YAY!!!:', event.type);
-      console.log(event.data.object.id);
-      const sessionId = event.data.object.id;
-      stripe.checkout.sessions.retrieve(
-        sessionId,
-        { expand: ['line_items'] }
-      ).then(function(session) {
-        console.log('ITEMS: ', session.line_items);
-        fulfillOrder(session.line_items.data);
-      }).catch(function(error) {
-        console.log(error);
-      });
-      break;
-    default:
-      break;
-  }
-  res.status(200).end();
 });
 
 const fulfillOrder = async (lineItems) => {

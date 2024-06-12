@@ -7,7 +7,7 @@ export const checkoutItems = async (products: Product[]) => {
   try {
     const auth = { withCredentials: true };
     const payload = { products };
-    const res = await api.post('/api/stripe/create-checkout-session', payload, auth);
+    const res = await api.post('/api/stripe/checkout', payload, auth);
     location.replace(res.data.url);
     return res.data;
   } catch (err) {
